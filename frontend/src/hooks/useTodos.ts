@@ -13,10 +13,10 @@ function useTodos() {
     
     try {
       const response = await fetch(
-        "https://jsonplaceholder.typicode.com/todos"
+        "http://localhost:3000/api/todos"
       );
       const data: Todo[] = await response.json();
-        
+      
       setTodos(data);
     } catch {
       setError("通信に失敗しました。時間を置いて再度お試しください。");
