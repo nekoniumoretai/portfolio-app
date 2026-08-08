@@ -15,6 +15,9 @@ function useTodos() {
       const response = await fetch(
         "http://localhost:3000/api/todos"
       );
+      if (!response.ok) {
+        throw new Error("HTTPエラーが発生しました。");
+      }
       const data: Todo[] = await response.json();
       
       setTodos(data);
