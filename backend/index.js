@@ -25,14 +25,14 @@ app.get("/api/todos", (req, res) => {
       }
 
       // Todo型への変換に対応させるため
-      const todo = results.map((todo) => ({
+      const todos = results.map((todo) => ({
         id: todo.id,
-        user_id: todo.user_id,
+        userId: todo.user_id,
         title: todo.title,
         completed: Boolean(todo.completed),
       }));
 
-      res.json(todo);
+      res.json(todos);
     }
   );
 });
