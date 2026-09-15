@@ -31,8 +31,8 @@ function useTodos() {
       }
   
       const data: Todo = await response.json();
-      setTodos([
-        ...todos,
+      setTodos((prevTodos) => [ //非同期処理中の更新を考慮してfunctional updateを使用
+        ...prevTodos,
         data
       ]);
       return true; //通信成功時trueを返す。TODO追加ボタン押下時に使用する真偽値

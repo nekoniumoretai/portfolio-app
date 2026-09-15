@@ -48,10 +48,12 @@ app.post("/api/todos", (req, res) => {
     });
   }
 
+  const trimmedTitle = title.trim(); // trimした後のtitleをDBへ登録するための変数
+
   connection.query(
     `INSERT INTO todos (user_id, title)
     VALUES (?, ?)`,
-    [1, title],
+    [1, trimmedTitle],
     (error, result) => {
       if (error) {
         return res.status(500).json({
@@ -62,7 +64,7 @@ app.post("/api/todos", (req, res) => {
       res.status(201).json({
         id: result.insertId,
         userId: 1,
-        title: title,
+        title: trimmedTitle,
         completed: false,
       });
     }
