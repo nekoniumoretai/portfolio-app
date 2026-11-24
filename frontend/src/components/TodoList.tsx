@@ -3,7 +3,7 @@ import useTodos from "../hooks/useTodos";
 
 function TodoList() {
   const [text, setText] = useState("");
-  const { todos, loading, error, fetchTodos, addTodos } = useTodos();
+  const { todos, loading, error, fetchTodos, addTodos, updateTodoStatus } = useTodos();
 
   useEffect(() => {
     fetchTodos();
@@ -45,6 +45,17 @@ function TodoList() {
       <ul>
         {todos.map((todo) => (
           <li key={todo.id}>
+            <input
+              type="checkbox"
+              checked={todo.completed}
+              onChange={async (e) => {
+                try {
+                  await updateTodoStatus(todo.id, e.target.checked)
+                } catch {
+                  alert("Todoの更新に失敗しました")
+                }
+              }}
+            />
             {todo.title}
           </li>
         ))}
