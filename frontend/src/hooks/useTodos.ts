@@ -68,12 +68,47 @@ function useTodos() {
     }
   };
 
+  const updateTodoStatus = async (id: number, completed: boolean) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/todos/${id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({
+            completed: completed,
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Todoの更新に失敗しました");
+      }
+      setTodos((prevTodos) => {
+        return prevTodos.map((todo) => {
+          if (todo.id === id) {
+            return {
+              ...todo,
+              completed: completed
+            };
+          }
+          return todo;
+        });
+      });
+    } catch(error) {
+      console.error(error);
+      throw error;
+    }
+  }
+
   return {
     todos,
     loading,
     error,
     addTodos,
     fetchTodos,
+    updateTodoStatus,
   }
 }
 

@@ -71,6 +71,49 @@ app.post("/api/todos", (req, res) => {
   );
 });
 
+app.patch("/api/todos/:id", (req, res) => {
+  const id = Number(req.params.id);
+
+  // 更新するIDの整合性チェック
+  if (!Number.isInteger(id) || id <= 0){
+    return res.status(400).json({
+      message: "有効なTodo IDを指定してください"
+    });
+  }
+
+  // 更新するフラグのデータ型チェック
+  const completed = req.body?.completed;
+  if (typeof completed !== "boolean") {
+    return res.status(400).json({
+      message: "completedはboolean型で指定してください"
+    });
+  }
+
+  connection.query(
+    `UPDATE todos SET completed = ? WHERE id = ?`,
+    [completed, id],
+    (error, result) => {
+      if (error) {
+        console.error(error);
+        return res.status(500).json({
+          message: "データベースエラーが発生しました"
+        });
+      }
+
+      if (result.affectedRows === 0) {
+        return res.status(404).json({
+          message: "指定されたTodoが見つかりません"
+        })
+      };
+
+      res.status(200).json({
+        id: id,
+        completed: completed
+      });
+    }
+  );
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
