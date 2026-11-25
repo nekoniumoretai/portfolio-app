@@ -114,6 +114,40 @@ app.patch("/api/todos/:id", (req, res) => {
   );
 });
 
+app.delete("/api/todos/:id", (req, res) => {
+  const id = Number(req.params.id);
+
+  if (!Number.isInteger(id) || id <= 0) {
+    return res.status(400).json({
+      message: "有効なTodo IDを指定してください"
+    });
+  }
+
+  connection.query(
+    `DELETE FROM todos WHERE id = ?`,
+    [id],
+    (error, result) => {
+      if (error) {
+        console.error(error);
+        return res.status(500).json({
+          message: "データベースエラーが発生しました"
+        });
+      }
+
+      if (result.affectedRows === 0) {
+        return res.status(404).json({
+          message: "指定されたTodoが見つかりません"
+        })
+      }
+
+      res.status(200).json({
+        id: id,
+        message: "Todoを削除しました"
+      });
+    }
+  )
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

@@ -3,7 +3,7 @@ import useTodos from "../hooks/useTodos";
 
 function TodoList() {
   const [text, setText] = useState("");
-  const { todos, loading, error, fetchTodos, addTodos, updateTodoStatus } = useTodos();
+  const { todos, loading, error, fetchTodos, addTodos, updateTodoStatus, deleteTodo } = useTodos();
 
   useEffect(() => {
     fetchTodos();
@@ -57,6 +57,17 @@ function TodoList() {
               }}
             />
             {todo.title}
+            <button
+              onClick={async () => {
+                try {
+                  await deleteTodo(todo.id);
+                } catch {
+                  alert("Todoの削除に失敗しました");
+                }
+              }}
+            >
+              削除
+            </button>
           </li>
         ))}
       </ul>
