@@ -102,6 +102,28 @@ function useTodos() {
     }
   }
 
+  const deleteTodo = async (id: number) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/todos/${id}`,
+        {
+          method: "DELETE",
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Todoの削除に失敗しました");
+      }
+      setTodos((prevTodos) => {
+        return prevTodos.filter((todo) =>{
+          return todo.id !== id;
+        });
+      });
+    } catch(error) {
+      console.error(error);
+      throw error;
+    }
+  }
+
   return {
     todos,
     loading,
@@ -109,6 +131,7 @@ function useTodos() {
     addTodos,
     fetchTodos,
     updateTodoStatus,
+    deleteTodo,
   }
 }
 
